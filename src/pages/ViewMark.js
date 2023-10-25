@@ -2,6 +2,11 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Card from "../components/Card";
 import dataList from "../data.json";
+import {
+  handleBookmarkChange,
+  getBookmarkData,
+  saveBookmarkData,
+} from "../components/BookMark";
 
 const Loading = styled.div`
   display: flex;
@@ -36,33 +41,38 @@ const ViewWrap = styled.section`
   margin: 20px;
 `;
 
-function ViewAll() {
+function ViewMark() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   fetch("/data.json")
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setData(data.response.body.items);
-  //       setLoading(false);
-  //     })
-  //     .catch((error) => console.error("에러", error));
-  // }, []);
-
   useEffect(() => {
-    setData(dataList.response.body.items);
+    const storedBookmarkData = getBookmarkData();
+    const filteredData = dataList.response.body.items.filter(
+      (dataItem) => storedBookmarkData[dataItem.id] === true
+    );
+
+    setData(filteredData);
     setLoading(false);
-  });
+  }, []);
 
   if (loading) {
     return <Loading>Loading...</Loading>;
   }
 
+  const storedBookmarkData = getBookmarkData();
+
   return (
     <ViewWrap>
+      <h1>bookmarkpage</h1>
       {data.length > 0 ? (
-        data.map((dataItem, index) => <Card key={index} dataItem={dataItem} />)
+        data.map((dataItem, index) => (
+          <Card
+            key={index}
+            dataItem={dataItem}
+            onBookmarkChange={handleBookmarkChange}
+            isBookmarked={storedBookmarkData[dataItem.id]}
+          />
+        ))
       ) : (
         <div>No data available.</div>
       )}
@@ -70,4 +80,4 @@ function ViewAll() {
   );
 }
 
-export default ViewAll;
+export default ViewMark;

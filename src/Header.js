@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const HeaderWrap = styled.header`
@@ -10,11 +11,13 @@ const HeaderWrap = styled.header`
   width: -webkit-fill-available;
   padding: 20px;
   background-color: #303030;
-  color: #fff;
   z-index: 999999;
 
-  h1 {
+  .title {
+    color: #fff;
     font-size: 24px;
+    font-weight: 800;
+    cursor: default;
   }
 `;
 
@@ -22,7 +25,9 @@ export default class Header extends Component {
   render() {
     return (
       <HeaderWrap>
-        <h1>MicroDust</h1>
+        <Link to="/" className="title">
+          MicroDust
+        </Link>
       </HeaderWrap>
     );
   }
